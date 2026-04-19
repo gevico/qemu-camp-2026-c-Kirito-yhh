@@ -11,7 +11,6 @@ typedef struct {
 Position queue[MAX_QUEUE];
 int front = 0;
 int rear = 0;
-int size = 0;
 
 int maze[MAX_ROW][MAX_COL] = {
 	0, 1, 0, 0, 0,
@@ -24,27 +23,19 @@ int maze[MAX_ROW][MAX_COL] = {
 int visited[MAX_ROW][MAX_COL] = {0};
 Position prev[MAX_ROW][MAX_COL];
 
+// 方向：上、左、下、右（按此顺序探索以获得预期路径）
 int dirs[4][2] = {{-1, 0}, {0, -1}, {1, 0}, {0, 1}};
 
 void enqueue(Position pos) {
-    queue[rear] = pos;
-    rear = (rear + 1) % MAX_QUEUE;
-    size++;
+    queue[rear++] = pos;
 }
 
 Position dequeue() {
-    Position pos = queue[front];
-    front = (front + 1) % MAX_QUEUE;
-    size--;
-    return pos;
+    return queue[front++];
 }
 
 int isEmpty() {
-    return size == 0;
-}
-
-int isFull() {
-    return size == MAX_QUEUE;
+    return front == rear;
 }
 
 int main(void)

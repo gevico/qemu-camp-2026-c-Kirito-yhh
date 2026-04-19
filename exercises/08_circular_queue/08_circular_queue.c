@@ -33,10 +33,6 @@ People dequeue(Queue *q) {
     return p;
 }
 
-bool isEmpty(Queue *q) {
-    return q->count == 0;
-}
-
 int main() {
     Queue q;
     int total_people=50;
