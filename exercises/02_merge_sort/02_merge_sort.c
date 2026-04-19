@@ -15,9 +15,8 @@ Student temp[MAX_STUDENTS];
 
 void merge(int left, int mid, int right) {
     int i = left;
-    int j = mid + 1;
+    int j = mid+1;
     int k = left;
-    
     while (i <= mid && j <= right) {
         if (students[i].score >= students[j].score) {
             temp[k++] = students[i++];
@@ -25,27 +24,23 @@ void merge(int left, int mid, int right) {
             temp[k++] = students[j++];
         }
     }
-    
     while (i <= mid) {
         temp[k++] = students[i++];
     }
-    
     while (j <= right) {
         temp[k++] = students[j++];
     }
-    
     for (i = left; i <= right; i++) {
         students[i] = temp[i];
     }
+    
 }
 
 void merge_sort(int left, int right) {
-    if (left < right) {
-        int mid = left + (right - left) / 2;
-        
+    int mid = left +(right - left) /2;
+    if(left < right){
         merge_sort(left, mid);
         merge_sort(mid + 1, right);
-        
         merge(left, mid, right);
     }
 }

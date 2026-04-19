@@ -13,8 +13,34 @@ typedef struct {
 Student students[MAX_STUDENTS];
 
 void quick_sort(int left, int right) {
-    // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+    // 如果区间只有一个元素或无效，直接返回
+    if (left >= right) {
+        return;
+    }
+    
+    int i = left;
+    int j = right;
+    int pivot = students[(left + right) / 2].score;
+    
+    while (i <= j) {
+        while (students[i].score > pivot) {
+            i++;
+        }
+        while (students[j].score < pivot) {
+            j--;
+        }
+        
+        if (i <= j) {
+            Student temp = students[i];
+            students[i] = students[j];
+            students[j] = temp;
+            i++;
+            j--;
+        }
+    }
+    
+    quick_sort(left, j);
+    quick_sort(i, right);
 }
 
 int main(void) {
@@ -40,7 +66,6 @@ int main(void) {
 
     quick_sort(0, n - 1);
 
-    // 输出结果
     printf("\n快速排序后按成绩从高到低排序的学生名单：\n");
     for (int i = 0; i < n; i++) {
         printf("%s %d\n", students[i].name, students[i].score);
