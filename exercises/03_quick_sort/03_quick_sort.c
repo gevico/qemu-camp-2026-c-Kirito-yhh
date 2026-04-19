@@ -12,15 +12,29 @@ typedef struct {
 
 Student students[MAX_STUDENTS];
 
+int median_of_three(int left, int right) {
+    int mid = (left + right) / 2;
+    int a = students[left].score;
+    int b = students[mid].score;
+    int c = students[right].score;
+    
+    if ((a > b && a < c) || (a < b && a > c)) {
+        return a;
+    } else if ((b > a && b < c) || (b < a && b > c)) {
+        return b;
+    } else {
+        return c;
+    }
+}
+
 void quick_sort(int left, int right) {
-    // 如果区间只有一个元素或无效，直接返回
     if (left >= right) {
         return;
     }
     
     int i = left;
     int j = right;
-    int pivot = students[(left + right) / 2].score;
+    int pivot = median_of_three(left, right);
     
     while (i <= j) {
         while (students[i].score > pivot) {

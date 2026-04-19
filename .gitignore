@@ -49,3 +49,6 @@ tests/test_result_*.json
 .idea/
 *.swp
 *~
+
+# Trae IDE配置
+.trae/
