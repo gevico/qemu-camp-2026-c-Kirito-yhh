@@ -21,8 +21,8 @@ int maze[MAX_ROW][MAX_COL] = {
 
 int visited[MAX_ROW][MAX_COL] = {0};
 
-// 方向：右、下、左、上
-int dirs[4][2] = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+// 方向：上、左、下、右（按此顺序探索以获得预期路径）
+int dirs[4][2] = {{-1, 0}, {0, -1}, {1, 0}, {0, 1}};
 
 void push(Position pos) {
     stack[++top] = pos;
@@ -34,22 +34,6 @@ Position pop() {
 
 int isEmpty() {
     return top == -1;
-}
-
-void printMaze() {
-    printf("迷宫路径：\n");
-    for (int i = 0; i < MAX_ROW; i++) {
-        for (int j = 0; j < MAX_COL; j++) {
-            if (visited[i][j] == 2) {
-                printf("* ");
-            } else if (maze[i][j] == 1) {
-                printf("# ");
-            } else {
-                printf("  ");
-            }
-        }
-        printf("\n");
-    }
 }
 
 int main(void)
@@ -64,11 +48,10 @@ int main(void)
         Position current = stack[top];
         
         if (current.row == end.row && current.col == end.col) {
-            for (int i = 0; i <= top; i++) {
-                visited[stack[i].row][stack[i].col] = 2;
+            // 从终点到起点输出路径坐标
+            for (int i = top; i >= 0; i--) {
+                printf("(%d, %d)\n", stack[i].row, stack[i].col);
             }
-            printMaze();
-            printf("\n找到路径！\n");
             return 0;
         }
         
@@ -94,6 +77,6 @@ int main(void)
         }
     }
     
-    printf("未找到路径！\n");
+    printf("No path!\n");
 	return 0;
 }
