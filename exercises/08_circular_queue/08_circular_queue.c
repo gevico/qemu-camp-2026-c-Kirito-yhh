@@ -51,7 +51,8 @@ int main() {
             People p = dequeue(&q);
             enqueue(&q, p);
         }
-        dequeue(&q);
+        People eliminated = dequeue(&q);
+        printf("淘汰: %d\n", eliminated.id);
     }
     
     printf("最后剩下的人是: %d\n", q.data[q.head].id);

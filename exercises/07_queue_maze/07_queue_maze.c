@@ -58,7 +58,7 @@ int main(void)
                 path[pathLen++] = p;
                 p = prev[p.row][p.col];
             }
-            for (int i = pathLen - 1; i >= 0; i--) {
+            for (int i = 0; i < pathLen; i++) {
                 printf("(%d, %d)\n", path[i].row, path[i].col);
             }
             return 0;
