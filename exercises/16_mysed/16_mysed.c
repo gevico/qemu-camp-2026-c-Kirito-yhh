@@ -9,15 +9,55 @@ int parse_replace_command(const char* cmd, char** old_str, char** new_str) {
         return -1;
     }
 
-    // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+    const char* p = cmd + 2;
+    const char* delimiter = strchr(p, '/');
+    if (!delimiter) {
+        return -1;
+    }
+
+    size_t old_len = delimiter - p;
+    *old_str = (char*)malloc(old_len + 1);
+    if (!*old_str) return -1;
+    strncpy(*old_str, p, old_len);
+    (*old_str)[old_len] = '\0';
+
+    p = delimiter + 1;
+    delimiter = strchr(p, '/');
+    if (!delimiter) {
+        free(*old_str);
+        *old_str = NULL;
+        return -1;
+    }
+
+    size_t new_len = delimiter - p;
+    *new_str = (char*)malloc(new_len + 1);
+    if (!*new_str) {
+        free(*old_str);
+        *old_str = NULL;
+        return -1;
+    }
+    strncpy(*new_str, p, new_len);
+    (*new_str)[new_len] = '\0';
 
     return 0;
 }
 
 void replace_first_occurrence(char* str, const char* old, const char* new) {
-    // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+    char* pos = strstr(str, old);
+    if (!pos) return;
+
+    size_t old_len = strlen(old);
+    size_t new_len = strlen(new);
+
+    if (new_len > old_len) {
+        memmove(pos + new_len, pos + old_len, strlen(pos + old_len) + 1);
+    }
+
+    memcpy(pos, new, new_len);
+
+    if (new_len < old_len) {
+        memmove(pos + new_len, pos + old_len, strlen(pos + old_len) + 1);
+    }
 }
 
 int main(int argc, char* argv[]) {
@@ -27,13 +67,12 @@ int main(int argc, char* argv[]) {
 
     char* old_str = NULL;
     char* new_str = NULL;
-    
+
     if (parse_replace_command(replcae_rules, &old_str, &new_str) != 0) {
         fprintf(stderr, "Invalid replace command format. Use 's/old/new/'\n");
         return 1;
     }
 
-    
     replace_first_occurrence(line, old_str, new_str);
     fputs(line, stdout);
 

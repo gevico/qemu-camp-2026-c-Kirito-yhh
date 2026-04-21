@@ -12,10 +12,40 @@
 int parse_url(const char* url) {
     int err = 0;
 
-    // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+    char* url_copy = strdup(url);
+    if (!url_copy) {
+        err = ENOMEM;
+        goto exit;
+    }
 
+    char* query = strchr(url_copy, '?');
+    if (!query) {
+        err = 1;
+        goto exit;
+    }
+    query++;
+
+    char* params = strdup(query);
+    if (!params) {
+        err = ENOMEM;
+        goto exit;
+    }
+
+    char* param = strtok(params, "&");
+    while (param != NULL) {
+        char* equal = strchr(param, '=');
+        if (equal) {
+            *equal = '\0';
+            char* key = param;
+            char* value = equal + 1;
+            printf("key = %s, value = %s\n", key, value);
+        }
+        param = strtok(NULL, "&");
+    }
+
+    free(params);
 exit:
+    free(url_copy);
     return err;
 }
 
