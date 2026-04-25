@@ -23,25 +23,26 @@ char to_lower(char c) { return tolower(c); }
 
 // 添加单词到哈希表
 void add_word(WordCount **hash_table, const char *word) {
-    unsigned int index = hash(word);
-    WordCount *current = hash_table[index];
-    
-    // 检查单词是否已存在
-    while (current != NULL) {
-        if (strcmp(current->word, word) == 0) {
-            current->count++;
-            return;
-        }
-        current = current->next;
+  unsigned int h = hash(word);
+  WordCount *current = hash_table[h];
+
+  while (current != NULL) {
+    if (strcmp(current->word, word) == 0) {
+      current->count++;
+      return;
     }
-    
-    // 创建新节点
-    WordCount *new_word = (WordCount *)malloc(sizeof(WordCount));
-    strncpy(new_word->word, word, MAX_WORD_LEN - 1);
-    new_word->word[MAX_WORD_LEN - 1] = '\0';
-    new_word->count = 1;
-    new_word->next = hash_table[index];
-    hash_table[index] = new_word;
+    current = current->next;
+  }
+
+  WordCount *new_node = (WordCount *)malloc(sizeof(WordCount));
+  if (new_node == NULL)
+    return;
+
+  strncpy(new_node->word, word, MAX_WORD_LEN - 1);
+  new_node->word[MAX_WORD_LEN - 1] = '\0';
+  new_node->count = 1;
+  new_node->next = hash_table[h];
+  hash_table[h] = new_node;
 }
 
 // 打印单词统计结果
