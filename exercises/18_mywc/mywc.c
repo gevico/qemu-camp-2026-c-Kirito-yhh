@@ -52,7 +52,7 @@ void print_word_counts(WordCount **hash_table) {
   for (int i = 0; i < HASH_SIZE; i++) {
     WordCount *current = hash_table[i];
     while (current != NULL) {
-      printf("%s: %d\n", current->word, current->count);
+      printf("%-21s%d\n", current->word, current->count);
       current = current->next;
     }
   }
