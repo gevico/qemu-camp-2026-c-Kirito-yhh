@@ -6,8 +6,8 @@ SRCS = 18_mywc.c mywc.c
 OBJS := $(SRCS:.c=.o)
 
 all: $(TARGET)
-
-
+$(TARGET): $(OBJS)
+	$(CC) $(CFLAGS) -o $@ $^
 
 clean:
 	rm -f $(TARGET) $(OBJS)

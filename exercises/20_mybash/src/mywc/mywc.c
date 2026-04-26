@@ -26,8 +26,25 @@ void add_word(WordCount **hash_table, const char *word) {
   unsigned int index = hash(word);
   WordCount *entry = hash_table[index];
 
-    // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+  while (entry != NULL) {
+    if (strcmp(entry->word, word) == 0) {
+      entry->count++;
+      return;
+    }
+    entry = entry->next;
+  }
+  
+  WordCount *new_entry = (WordCount*)malloc(sizeof(WordCount));
+  if (!new_entry) {
+    fprintf(stderr, "Memory allocation failed\n");
+    return;
+  }
+  
+  strncpy(new_entry->word, word, MAX_WORD_LEN - 1);
+  new_entry->word[MAX_WORD_LEN - 1] = '\0';
+  new_entry->count = 1;
+  new_entry->next = hash_table[index];
+  hash_table[index] = new_entry;
 }
 
 // 打印单词统计结果
@@ -35,8 +52,40 @@ void print_word_counts(WordCount **hash_table) {
   printf("Word Count Statistics:\n");
   printf("======================\n");
 
-    // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+  typedef struct {
+    char word[MAX_WORD_LEN];
+    int count;
+  } WordEntry;
+  
+  WordEntry all_words[HASH_SIZE * 10];
+  int total_words = 0;
+  
+  for (int i = 0; i < HASH_SIZE; i++) {
+    WordCount *entry = hash_table[i];
+    while (entry != NULL) {
+      strncpy(all_words[total_words].word, entry->word, MAX_WORD_LEN - 1);
+      all_words[total_words].word[MAX_WORD_LEN - 1] = '\0';
+      all_words[total_words].count = entry->count;
+      total_words++;
+      entry = entry->next;
+    }
+  }
+  
+  for (int i = 0; i < total_words - 1; i++) {
+    for (int j = 0; j < total_words - i - 1; j++) {
+      if (all_words[j].count < all_words[j + 1].count ||
+          (all_words[j].count == all_words[j + 1].count &&
+           strcmp(all_words[j].word, all_words[j + 1].word) > 0)) {
+        WordEntry temp = all_words[j];
+        all_words[j] = all_words[j + 1];
+        all_words[j + 1] = temp;
+      }
+    }
+  }
+  
+  for (int i = 0; i < total_words; i++) {
+    printf("%-20s %d\n", all_words[i].word, all_words[i].count);
+  }
 }
 
 // 释放哈希表内存

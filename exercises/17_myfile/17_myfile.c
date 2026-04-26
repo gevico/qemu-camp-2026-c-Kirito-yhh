@@ -38,7 +38,6 @@ int main(int argc, char *argv[]) {
       continue;
     }
 
-    // Check ELF magic
     if (memcmp(ehdr.e_ident, ELFMAG, SELFMAG) == 0) {
       printf("File: %s\n", filepath[i]);
       print_elf_type(ehdr.e_type);

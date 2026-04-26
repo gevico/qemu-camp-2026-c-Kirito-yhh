@@ -5,7 +5,7 @@ TARGET := 17_myfile
 SRCS := 17_myfile.c
 OBJS := $(SRCS:.c=.o)
 
-all: $(TARGET)
+all: $(TARGET) $(OBJS)
 
 
 

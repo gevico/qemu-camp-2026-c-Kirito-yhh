@@ -23,13 +23,28 @@ static void josephus_problem(int n, int k, int m) {
 
     // 起始位置移动到第 k 个
     for (int i = 1; i < k; ++i) {
-        // TODO: 在这里添加你的代码
-        // I AM NOT DONE
+        prev = current;
+        current = current->next;
     }
 
-    // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+    // 循环删除直到只剩一个节点
+    while (current->next != current) {
+        // 数 m-1 次，移动到第 m 个人
+        for (int i = 1; i < m; ++i) {
+            prev = current;
+            current = current->next;
+        }
+        // 打印要出列的人
+        printf("%d ", current->id);
+        // 删除 current 指向的节点
+        prev->next = current->next;
+        free(current);
+        current = prev->next;
+    }
+    // 打印最后一个人
+    printf("%d", current->id);
     
+    free_list(current);
     printf("\n");
 }
 

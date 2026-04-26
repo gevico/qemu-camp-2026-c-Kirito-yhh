@@ -7,8 +7,12 @@
 #include <string.h>
 
 void trim(char *str) {
-    // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+    while (*str && isspace((unsigned char)*str))
+        memmove(str, str + 1, strlen(str));
+    
+    int len = strlen(str);
+    while (len > 0 && isspace((unsigned char)str[len - 1]))
+        str[--len] = '\0';
 }
 
 int load_dictionary(const char *filename, HashTable *table,
@@ -24,8 +28,28 @@ int load_dictionary(const char *filename, HashTable *table,
   char current_translation[1024] = {0};
   int in_entry = 0;
 
-    // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+  while (fgets(line, sizeof(line), file)) {
+    line[strcspn(line, "\n")] = '\0';
+    
+    if (line[0] == '#') {
+      if (in_entry && current_word[0] != '\0') {
+        hash_table_insert(table, current_word, current_translation);
+        (*dict_count)++;
+        memset(current_word, 0, sizeof(current_word));
+        memset(current_translation, 0, sizeof(current_translation));
+      }
+      strncpy(current_word, line + 1, sizeof(current_word) - 1);
+      to_lowercase(current_word);
+      in_entry = 1;
+    } else if (strncmp(line, "Trans:", 6) == 0 && in_entry) {
+      strncpy(current_translation, line + 6, sizeof(current_translation) - 1);
+    }
+  }
+  
+  if (in_entry && current_word[0] != '\0') {
+    hash_table_insert(table, current_word, current_translation);
+    (*dict_count)++;
+  }
 
   fclose(file);
   return 0;
@@ -45,7 +69,7 @@ int __cmd_mytrans(const char* filename) {
 
   printf("=== 哈希表版英语翻译器（支持百万级数据）===\n");
   uint64_t dict_count = 0;
-  if (load_dictionary("/workspace/exercises/20_mybash/src/mytrans/dict.txt", table, &dict_count) != 0) {
+  if (load_dictionary("/root/qemu-camp-2026-c-Kirito-yhh/exercises/20_mybash/src/mytrans/dict.txt", table, &dict_count) != 0) {
     fprintf(stderr, "加载词典失败，请确保 dict.txt 存在。\n");
     free_hash_table(table);
     return 1;

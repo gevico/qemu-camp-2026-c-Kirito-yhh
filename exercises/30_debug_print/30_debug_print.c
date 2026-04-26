@@ -2,16 +2,31 @@
 #include <stdlib.h>
 #include <execinfo.h>
 
-#ifdef TODO
+#ifndef DEBUG_LEVEL
+#define DEBUG_LEVEL 2
+#endif
 
-#define DEBUG_PRINT(fmt, ...) 
-    // TODO: 在这里添加你的代码
-    // I AM NOT DONE
-
+#if DEBUG_LEVEL >= 1
+#define DEBUG_PRINT(fmt, ...) do { \
+    printf("DEBUG: func=%s, line=%d", __func__, __LINE__); \
+    if (DEBUG_LEVEL >= 2) { \
+        printf(", " fmt, ##__VA_ARGS__); \
+    } \
+    printf("\n"); \
+    if (DEBUG_LEVEL >= 3) { \
+        void *callstack[10]; \
+        int frames = backtrace(callstack, 10); \
+        char **symbols = backtrace_symbols(callstack, frames); \
+        if (symbols) { \
+            for (int i = 1; i < frames; i++) { \
+                printf("DEBUG: Caller: %s\n", symbols[i]); \
+            } \
+            free(symbols); \
+        } \
+    } \
+} while (0)
 #else
-
 #define DEBUG_PRINT(fmt, ...) do {} while (0)
-
 #endif
 
 
@@ -28,21 +43,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-//! MUST BE ENSURE THE DEBUG_PRINT("x=%d", x) AT THE 48 LINE
-
-// 测试代码
 void test() {
     int x = 42;
     DEBUG_PRINT("x=%d", x);
